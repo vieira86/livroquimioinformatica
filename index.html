@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprendizado de Máquina no Reconhecimento de Padrões Moleculares</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .molecule-bg {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .timeline-line {
+            background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+        }
+        
+        .btn-gradient {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gradient:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(30, 58, 138, 0.4);
+        }
+        
+        .feature-icon {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 molecule-bg">
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 gradient-bg opacity-10"></div>
+        
+        <!-- Animated Molecule Background -->
+        <div class="absolute inset-0 flex items-center justify-center opacity-20">
+            <div class="relative">
+                <div class="absolute inset-0 gradient-bg rounded-full blur-3xl"></div>
+                <i class="fas fa-atom text-9xl float-animation gradient-text"></i>
+            </div>
+        </div>
+        
+        <div class="relative z-10 text-center px-4 max-w-6xl mx-auto">
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                <!-- Conteúdo Textual -->
+                <div class="lg:w-1/2 text-center lg:text-left">
+                    <h1 class="text-6xl md:text-7xl font-bold mb-6">
+                        <span class="gradient-text">Suporte ao livro</span>
+                    </h1>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 text-gray-700">
+                        Aprendizado de Máquina no Reconhecimento de Padrões Moleculares
+                    </h2>
+                    <!-- <h3 class="text-xl md:text-2xl text-gray-600 mb-8">em Produtos Naturais</h3> -->
+                    <p class="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0">
+                        Uma abordagem completa para análise de dados e descoberta de padrões em produtos naturais usando técnicas de machine learning
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
+                        <button onclick="scrollToSection('features')" class="btn-gradient text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg">
+                            <i class="fas fa-book mr-2"></i> Explorar Livro
+                        </button>
+                        <button onclick="downloadDatasets()" class="bg-white border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-blue-50 transition-all duration-300 shadow-lg">
+                            <i class="fas fa-database mr-2"></i> Baixar Datasets
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Capa do Livro -->
+                <div class="lg:w-1/2 flex justify-center items-center mt-9">
+                    <div class="relative group">
+                        <!-- Sombra e Efeito -->
+                        <div class="absolute inset-0 gradient-bg rounded-2xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity duration-300"></div>
+                        
+                        <!-- Imagem da Capa -->
+                        <div class="relative bg-white rounded-2xl shadow-2xl p-2 transform transition-all duration-100 group-hover:scale-105">
+                            <img src="capa.png" 
+                                 alt="Capa do Livro - Aprendizado de Máquina no Reconhecimento de Padrões Moleculares" 
+                                 class="rounded-lg shadow-lg w-full max-w-sm mx-auto object-cover">
+                            
+                            <!-- Badge de Destaque -->
+                            <div class="absolute -top-1 -left-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-2 py-2 rounded-full shadow-lg text-sm font-bold">
+                                <i class="fas fa-star mr-1"></i> Novo Livro
+                            </div>
+                        </div>
+                        
+                        <!-- Efeito de Brilho -->
+                        <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white to-transparent opacity-0 group-hover:opacity-10 rounded-2xl transition-opacity duration-300"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Datasets Section -->
+            <div class="bg-white rounded-2xl shadow-xl p-6 max-w-md mx-auto mt-8">
+                <h3 class="text-lg font-semibold mb-3 text-gray-800">
+                    <i class="fas fa-database mr-2 text-blue-600"></i> Bancos de Dados
+                </h3>
+                <p class="text-gray-600 mb-4">Acesse os datasets utilizados no livro para análise de produtos naturais</p>
+                <button onclick="downloadDatasets()" class="w-full btn-gradient text-white px-6 py-3 rounded-lg font-semibold">
+                    <i class="fas fa-cloud-download-alt mr-2"></i> Acessar Datasets
+                </button>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 pulse-animation">
+            <i class="fas fa-chevron-down text-2xl text-blue-600"></i>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    <span class="gradient-text">Recursos do Livro</span>
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Tudo que você precisa para análise de padrões moleculares em produtos naturais
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+                    <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center mb-4">
+                        <i class="fas fa-brain text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Aprendizado de Máquina</h3>
+                    <p class="text-gray-600">Técnicas avançadas de ML aplicadas à análise de padrões moleculares em produtos naturais.</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+                    <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center mb-4">
+                        <i class="fas fa-flask text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Análise Quimiométrica</h3>
+                    <p class="text-gray-600">Métodos estatísticos e computacionais para extração de informações químicas relevantes.</p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+                    <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-line text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Reconhecimento de Padrões</h3>
+                    <p class="text-gray-600">Identificação automática de padrões moleculares e estruturas bioativas em compostos naturais.</p>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+                    <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center mb-4">
+                        <i class="fas fa-database text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Bancos de Dados</h3>
+                    <p class="text-gray-600">Acesso a datasets curados de produtos naturais para validação e treinamento de modelos.</p>
+                </div>
+                
+                <!-- Feature 5 -->
+                <div class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+                    <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center mb-4">
+                        <i class="fas fa-code text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Código Fonte</h3>
+                    <p class="text-gray-600">Scripts e algoritmos implementados em Python e R para reproduzir as análises do livro.</p>
+                </div>
+                
+                <!-- Feature 6 -->
+                <div class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+                    <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center mb-4">
+                        <i class="fas fa-book-open text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Casos de Estudo</h3>
+                    <p class="text-gray-600">Aplicações práticas em análise de óleos essenciais, extratos vegetais e compostos bioativos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-20 px-4 bg-white">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    <span class="gradient-text">Como Funciona</span>
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Metodologia passo a passo para análise de padrões moleculares
+                </p>
+            </div>
+            
+            <div class="relative">
+                <!-- Timeline Line -->
+                <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 h-full timeline-line"></div>
+                
+                <!-- Steps -->
+                <div class="space-y-12">
+                    <!-- Step 1 -->
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="md:w-1/2 md:text-right">
+                            <div class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+                                <h3 class="text-2xl font-bold mb-3 gradient-text">Passo 1: Coleta de Dados</h3>
+                                <p class="text-gray-600">Obtenção e preparação de dados espectroscópicos de produtos naturais.</p>
+                            </div>
+                        </div>
+                        <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center z-10">
+                            <span class="text-white font-bold text-xl">1</span>
+                        </div>
+                        <div class="md:w-1/2"></div>
+                    </div>
+                    
+                    <!-- Step 2 -->
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="md:w-1/2"></div>
+                        <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center z-10">
+                            <span class="text-white font-bold text-xl">2</span>
+                        </div>
+                        <div class="md:w-1/2">
+                            <div class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+                                <h3 class="text-2xl font-bold mb-3 gradient-text">Passo 2: Pré-processamento</h3>
+                                <p class="text-gray-600">Limpeza, normalização e seleção de variáveis relevantes nos dados espectrais.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 3 -->
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="md:w-1/2 md:text-right">
+                            <div class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+                                <h3 class="text-2xl font-bold mb-3 gradient-text">Passo 3: Modelagem ML</h3>
+                                <p class="text-gray-600">Aplicação de algoritmos de aprendizado de máquina para reconhecimento de padrões.</p>
+                            </div>
+                        </div>
+                        <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center z-10">
+                            <span class="text-white font-bold text-xl">3</span>
+                        </div>
+                        <div class="md:w-1/2"></div>
+                    </div>
+                    
+                    <!-- Step 4 -->
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="md:w-1/2"></div>
+                        <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center z-10">
+                            <span class="text-white font-bold text-xl">4</span>
+                        </div>
+                        <div class="md:w-1/2">
+                            <div class="bg-white rounded-2xl p-6 shadow-lg card-hover">
+                                <h3 class="text-2xl font-bold mb-3 gradient-text">Passo 4: Validação</h3>
+                                <p class="text-gray-600">Validação dos modelos e interpretação dos resultados para descoberta de padrões moleculares.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Author Section -->
+    <section class="py-20 px-4 bg-white">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-3xl shadow-xl p-8 md:p-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-8 text-center">
+                    <span class="gradient-text">Sobre o Autor</span>
+                </h2>
+                
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <!-- Foto do Autor -->
+                    <div class="md:w-1/3 flex justify-center">
+                        <img src="https://github.com/vieira86.png" 
+                             alt="Prof. Rafael Vieira" 
+                             class="w-48 h-48 rounded-full border-4 border-green-500 shadow-xl object-cover">
+                    </div>
+                    
+                    <!-- Informações do Autor -->
+                    <div class="md:w-2/3 text-center md:text-left">
+                        <h3 class="text-2xl font-bold mb-2 text-gray-800">Prof. Rafael Vieira</h3>
+                        <p class="text-lg text-green-600 font-semibold mb-4">Quimiometria & Machine Learning</p>
+                        
+                        <div class="space-y-4 text-gray-700">
+                            <p>
+                                Professor e pesquisador com especialização em quimiometria e aprendizado de máquina, 
+                                focado na análise de produtos naturais e desenvolvimento de métodos computacionais 
+                                para reconhecimento de padrões moleculares.
+                            </p>
+                            <p>
+                                Com vasta experiência em análise espectroscópica e mineração de dados, 
+                                desenvolve abordagens inovadoras que integram técnicas químicas modernas 
+                                com algoritmos de machine learning para descoberta de compostos bioativos.
+                            </p>
+                            <p>
+                                Atua na formação de novos pesquisadores na interdisciplinaridade entre 
+                                química, estatística e ciência da computação, contribuindo para avanços 
+                                na área de produtos naturais e quimiotaxonomia.
+                            </p>
+                        </div>
+                        
+                        <!-- Contato e Redes -->
+                        <div class="mt-6 flex flex-col sm:flex-row gap-4 items-center justify-center md:justify-start">
+                            <div class="flex items-center gap-2 text-gray-600">
+                                <i class="fas fa-envelope text-green-600"></i>
+                                <span>rafael.vieira@ifro.edu.br</span>
+                            </div>
+                            <a href="https://github.com/vieira86" target="_blank" 
+                               class="flex items-center gap-2 text-green-600 hover:text-green-800 transition-colors">
+                                <i class="fab fa-github text-xl"></i>
+                                <span>GitHub</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scientific Purpose Section -->
+    <section class="py-20 px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-3xl shadow-xl p-8 md:p-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 text-center">
+                    <span class="gradient-text">Propósito Científico</span>
+                </h2>
+                <div class="space-y-4 text-lg text-gray-700">
+                    <p>
+                        Este livro apresenta uma abordagem integrada entre quimiometria e aprendizado de máquina para análise de produtos naturais, combinando técnicas espectroscópicas modernas com algoritmos computacionais avançados.
+                    </p>
+                    <p>
+                        A metodologia desenvolvida permite identificar padrões moleculares complexos em óleos essenciais, extratos vegetais e outros compostos naturais, facilitando a descoberta de novas substâncias bioativas e a caracterização quimiotaxonômica de espécies vegetais.
+                    </p>
+                    <p>
+                        Cada capítulo inclui exemplos práticos, código-fonte reproduzível e datasets reais, garantindo que pesquisadores e estudantes possam aplicar imediatamente as técnicas apresentadas em seus próprios projetos de pesquisa.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="py-20 px-4 gradient-bg">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 text-white">
+                Pronto para Começar?
+            </h2>
+            <p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+                Explore os recursos e datasets para análise de padrões moleculares em produtos naturais
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="scrollToSection('features')" class="bg-white text-blue-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-all duration-300 shadow-lg">
+                    <i class="fas fa-book mr-2"></i> Explorar Conteúdo
+                </button>
+                <button onclick="downloadDatasets()" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white hover:text-blue-600 transition-all duration-300">
+                    <i class="fas fa-database mr-2"></i> Baixar Datasets
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4 gradient-text">Aprendizado de Máquina</h3>
+                    <p class="text-gray-400">
+                        Livro sobre reconhecimento de padrões moleculares em produtos naturais usando técnicas de machine learning.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#features" class="text-gray-400 hover:text-white transition-colors">Recursos</a></li>
+                        <li><a href="#how-it-works" class="text-gray-400 hover:text-white transition-colors">Metodologia</a></li>
+                        <li><a href="#datasets" class="text-gray-400 hover:text-white transition-colors">Datasets</a></li>
+                    </ul>
+                </div>
+                
+                <!-- <div>
+                    <h4 class="text-lg font-semibold mb-4">Connect</h4>
+                    <div class="flex space-x-4">
+                        <a href="https://github.com/vieira86/DynamicDock" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-github text-2xl"></i>
+                        </a>
+                        <a href="#" onclick="downloadFromDrive()" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fas fa-download text-2xl"></i>
+                        </a>
+                    </div>
+                    <p class="text-gray-400 mt-4 text-sm">
+                        © 2024 Dynamic Dock. Open source and free for scientific research.
+                    </p>
+                </div> -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">About the Author</h4>
+                    
+                    <div class="flex items-center space-x-4">
+                        <!-- Foto -->
+                        <img src="https://github.com/vieira86.png" 
+                            alt="Rafael Vieira" 
+                            class="w-16 h-16 rounded-full border-2 border-green-500 shadow-lg">
+
+                        <!-- Infos -->
+                        <div>
+                            <p class="font-semibold text-white">Prof. Rafael Vieira</p>
+                            <p class="text-sm text-gray-400">Quimiometria & Machine Learning</p>
+                            <p class="text-sm text-gray-400">rafael.vieira@ifro.edu.br</p>
+                        </div>
+                    </div>
+
+                    <!-- Social -->
+                    <div class="flex space-x-4 mt-4">
+                        <a href="https://github.com/vieira86" target="_blank"
+                        class="flex items-center space-x-2 text-gray-400 hover:text-white transition">
+                            <i class="fab fa-github text-xl"></i>
+                            <span>GitHub</span>
+                        </a>
+                    </div>
+
+    <p class="text-gray-400 mt-4 text-sm">
+        © 2026 Aprendizado de Máquina no Reconhecimento de Padrões Moleculares. Recurso educacional para pesquisa científica.
+    </p>
+</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Google Drive download function for datasets
+        function downloadDatasets() {
+            // Replace this with your actual Google Drive folder ID
+            const googleDriveFolderId = 'SEU_ID_DA_PASTA_AQUI';
+            const downloadUrl = `https://drive.google.com/drive/folders/${googleDriveFolderId}`;
+            
+            // Open the Google Drive folder in a new tab
+            window.open(downloadUrl, '_blank');
+            
+            // Show notification
+            showNotification('Redirecionando para a pasta de datasets no Google Drive!');
+        }
+
+        // Notification system
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transition-all duration-300';
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Add scroll animations
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.float-animation');
+            if (parallax) {
+                parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.card-hover');
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
