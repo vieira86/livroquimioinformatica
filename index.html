@@ -108,9 +108,12 @@
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
                         <button onclick="scrollToSection('features')" class="btn-gradient text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg">
                             <i class="fas fa-book mr-2"></i> Explorar Livro
-                        </button>
+                        <!-- </button>
                         <button onclick="downloadDatasets()" class="bg-white border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-blue-50 transition-all duration-300 shadow-lg">
                             <i class="fas fa-database mr-2"></i> Baixar Datasets
+                        </button> -->
+                        <button onclick="openBookPage()" class="btn-gradient text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg">
+                             <i class="fas fa-external-link-alt mr-2"></i> Ver Página do Livro
                         </button>
                     </div>
                 </div>
@@ -481,6 +484,9 @@
                 element.scrollIntoView({ behavior: 'smooth' });
             }
         }
+
+        function openBookPage() {
+            window.open('https://ayaeditora.com.br/livro/46044/', '_blank')}
 
         // Google Drive download function for datasets
         function downloadDatasets() {
